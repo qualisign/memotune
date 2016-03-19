@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+<script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.20/p5.js"></script>	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.22/addons/p5.sound.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.23/addons/p5.dom.min.js"></script>
+<script src="{% static "js/play.js" %}"></script> <!-- JavaScript -->
+{% endblock %}

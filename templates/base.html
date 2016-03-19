@@ -1,0 +1,40 @@
+<!doctype html>
+
+{% load staticfiles %}
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="{% static "css/styles.css" %}" />
+  <link href='https://fonts.googleapis.com/css?family=Delius+Swash+Caps' rel='stylesheet' type='text/css'>   
+  <link href='https://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+  <title>memotune</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+  <script src="{% static "js/play.js" %}"></script>
+	  
+  {% block scripts %}{% endblock %}
+
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+<h1>memotune</h1>
+<div class="container">    
+    <div class="sideBar">
+      <ul>
+        <li><a href="/introduction/">introduction</a></li>
+        <li><a href="/start/">start</a></li>
+	<li><a href="/profile/">profile</a></li>
+        <li><a href="/leaderboards/">leaderboards</a></li>
+        <li><a href="/research/">research</a></li>
+      </ul>
+    </div>
+    <div class="content" id="content">{% block content %}{% endblock %}</div>
+</div>
+</body>
+</html>

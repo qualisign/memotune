@@ -1,0 +1,12 @@
+from django.db import models
+
+    
+class Visitor(models.Model):
+    self.notes =
+    self.high_score =
+    self.points =
+    self.level =
+    self.playing =
+    self.duration =
+    self.
+    

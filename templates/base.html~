@@ -1,0 +1,42 @@
+<!doctype html>
+
+{% load staticfiles %}
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="{% static "css/styles.css" %}" />
+  <link href='https://fonts.googleapis.com/css?family=Delius+Swash+Caps' rel='stylesheet' type='text/css'>   
+
+  <title>memotune</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.20/p5.js"></script>	
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.22/addons/p5.sound.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.23/addons/p5.dom.min.js"></script>
+  <script src="{% static "js/play.js" %}"></script> <!-- JavaScript -->
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+<h1>memotune</h1>
+<div class="container">    
+    <div class="sideBar">
+      <ul>
+        <li><a href="/intro/">introduction</a></li>
+        <li><a href="/start/">start</a></li>
+	<li><a href="/profile/">profile</a></li>
+        <li><a href="/leaderboards/">high scores</a></li>
+        <li><a href="/research/">research</a></li>
+	<li><a href="/contact/">contact</a><li>
+      </ul>
+    </div>
+    <div class="content" id="content"></div>
+</div>
+</body>
+</html>

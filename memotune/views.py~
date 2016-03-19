@@ -1,0 +1,27 @@
+from django.shortcuts import render
+
+def home(request):
+    if request.method == 'POST':
+        if request.is_ajax():
+            if request.POST.get('go'):
+                pass
+            elif request.POST.get('square'):
+                pass
+            elif request.POST.get('message') == 'next':
+                pass
+            elif request.POST.get('message') == 'back':
+                pass
+            elif request.POST.get('message') == 'ready':       
+                pass
+    else:                
+        return render(request, 'experiment.html', {})
+
+
+
+
+
+
+
+            
+        
+            

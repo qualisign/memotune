@@ -1,0 +1,147 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>memotune</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.20/p5.js"></script>	
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.22/addons/p5.sound.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.23/addons/p5.dom.min.js"></script>
+
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  
+  <script>
+
+
+    
+    function getCookie(name)
+    {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+          // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+    }    
+
+    var nBack = 2;
+    var NOTE_FREQS = [16.35, 17.32, 18.35, 19.45, 20.60, 21.83, 23.12, 24.50, 25.96, 27.50, 29.14, 30.87];
+    var canvas;
+    var message = ["Memotune is a fun way to give your memory a workout.  It also trains your concentration and your ear for music.", "To give it a try, click 'GO' and listen to the notes.  When you hear a note that is identical to the note played two notes ago, click inside of the square.  You lose points if you fail to click when the notes are the same or you click when the notes are different", "Memotune demands concentration and strengthens your short-term (working) memory.  It is based on the scientifically acclaimed n-back test that is believed to improve fluid intelligence.  Have fun!"];
+    var messageCount = 0;			  
+    var level = 0;
+    var points = 0;
+    var squareDiff = 5;    
+    var SQUAREMAXWEIGHT = 25;
+    var duration = 500;
+    var noteCount = 0;			  
+    var CANVASWIDTH = 300;
+    var CANVASHEIGHT = 300;
+
+			  
+    function setup()
+    {
+      canvas = createCanvas(CANVASWIDTH, CANVASHEIGHT);
+      canvas.position(300, 50);
+      canvas.class("canvas");      
+
+      nextButton = createButton('submit');
+      nextButton.html("next");			  
+      backButton = createButton('submit');
+      backButton.html("back");
+      goButton = createButton('submit');
+      goButton.html("go");			  
+      backButton.hide();
+      
+      osc = new p5.Oscillator();
+      osc.setType('sine');
+
+			  
+      if (messageCount == 0)
+      { 
+        backButton.hide();
+      }
+      else if (messageCount == 2)
+      {
+        nextButton.hide();
+      }
+    }
+
+    function incMessageCount()
+    {
+      messageCount += 1; 
+    }
+    
+    function decMessageCount()
+    {
+      messageCount -= 1
+    }			  
+			  
+    function draw()
+    {
+      background(220, 180, 200);
+
+      message = createElement('h2', message[messageCount]);
+
+      ellipse(CANVASLENGTH/2, CANVASHEIGHT/2, 100, 100);
+      outerSquare = rect(CANVASLENGTH/2, CANVASWIDTH/2, SQUAREMAXWEIGHT, SQUAREMAXWEIGHT);    
+      innerSquare = rect(CANVASLENGTH/2, CANVASWIDTH/2, SQUAREMAXWEIGHT - squareDiff, SQUAREMAXWEIGHT - squareDiff);
+
+
+      backButton.mouseClicked(incMessageCount());
+      nextButton.mouseClicked(decMessageCount());
+      goButton.mousePressed(start());
+
+
+    }
+
+    function start()
+    {
+      while(squareDiff != SQUAREMAXWEIGHT)			  
+      {
+        var notes = [];
+	notes[noteCount] = NOTE_FREQS[Math.floor(Math.random() * NOTE_FREQS.length)];
+        osc.freq = notes[noteCount];
+        osc.play;
+        setTimeout(function(){}, duration);
+	if (notes[noteCount] == notes[noteCount - nBack])
+	{
+	  if (outerSquare.mousePressed() || innerCircle.mousePressed())
+	    {
+	      points += level;
+              fill(color(153, 51, 0));
+              fill()
+
+	    }
+          }								       
+	  else
+	  {
+            points -= level;
+	    squareDiff += 5;
+//	    showIncorrect();							 
+          }		  
+
+	}
+        noteCount ++;
+      }
+
+  </script>
+</body>
+</html>

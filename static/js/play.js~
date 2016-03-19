@@ -1,0 +1,150 @@
+      var NOTE_FREQS;
+      var FIBONACCI;
+      var CANVAS_WIDTH;
+      var CANVAS_HEIGHT;
+      var RADIUS;
+      var playing;
+      var circleColor;
+      var BGCOLOR;
+      var textColor;
+      var d;
+      var isOverCircle;
+      var previous;
+      var current;
+      var PAUSE;
+      var errorMessage;
+      var errorText;
+      var canvas;
+      var level;
+      var points;
+      var font; 
+      var levelText;
+      var pointsText;
+      var tries;
+
+      function setup() {
+	FIBONACCI = [8, 13, 21, 34, 55, 89];
+        ERROR_WORDS = ["whoa there!", "bad!", "nope!", "oof!", "nein!", "yikes!", "doh!", "whoops!"];
+        NOTE_FREQS = [16.35, 20.60, 23.12, 27.50, 29.14];
+        CANVAS_WIDTH = 1024;
+        CANVAS_HEIGHT = 768;
+        RADIUS = 150;
+        notes = [];
+        playing = false;
+        circleColor = 200;
+        BGCOLOR = (31, 0, 77);
+        PAUSE = 300;
+	points = 0;
+	level = 1;
+	tries = 3;
+        canvas = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+	canvas.parent('content'); 
+        background(BGCOLOR);
+        osc = new p5.Oscillator();
+        osc.setType('sine');
+        
+      }
+
+
+      function draw() {
+        current = notes.length - 1;
+        previous = notes.length - 3;
+        d = dist(mouseX, mouseY, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
+	  
+        if (d < RADIUS) {
+          isOverCircle = true;
+	  cursor(HAND);	
+        } else {
+          isOverCircle = false;
+          cursor(ARROW);		
+        }
+
+	noStroke();  
+        fill(circleColor);
+        ellipse(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, RADIUS*2, RADIUS*2);
+
+	stroke('#ddccff');
+	strokeWeight(1);  
+	fill(235);
+	textFont("Delius Swash Caps");
+	textSize(32);  
+	levelText = text("level: " + level, 120, 100);
+	pointsText = text("points: " + points, 120, 150);
+	triesText = text("tries: " + tries, 120, 200);  
+	  
+	if (errorMessage == true){
+	  textColor = 20;
+	  text(errorText, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
+	}
+	  
+      }
+      
+     
+      function mouseClicked() {
+
+        if (isOverCircle) {    
+	  if (!playing){
+	    playTune();
+	  } 
+          else {
+            if (current > 1){
+              check();
+            }
+        }
+      }
+
+      }
+
+	  	  
+      function playTune() {
+	 (function next() {
+            if (tries == 0) return;	  
+            setTimeout(function() {
+              freq = NOTE_FREQS[Math.floor(Math.random()*NOTE_FREQS.length)] * 10;
+              notes.push(freq);
+              playing = true;
+              errorMessage = false;	
+              osc.freq(freq);
+              osc.amp(0.5, 0.05);
+       	      osc.start();
+	      osc.stop(1);
+	      // does user fail to click when notes are same
+      	      if (notes[current] == notes[previous] && current > 2) {
+	        setTimeout(function(){
+                  if (!mouseIsPressed){
+                    tries -= 1;
+                    setTimeout(function(){
+	            
+                    }, 500);
+                      errorMessage = true;
+		      errorText = str(ERROR_WORDS[Math.floor(Math.random()*(ERROR_WORDS.length-1))]);		
+	          }
+	        }, 1800);
+		errorMessage = false;
+	      }
+
+              next();
+              }, 1800);
+           })();
+          }
+	  
+      function check() {
+	if (notes[current] == notes[previous]) {
+	  console.log(str(notes));
+	  console.log(notes[current] + " is equal to " + notes[previous]);
+	  if (points > FIBONACCI[level]){
+            level += 1;
+	  }   
+	  points += level;  
+	}
+        else {
+          tries -= 1;
+	  console.log(notes[current] + " isn't equal to " + notes[previous]);
+          setTimeout(function(){
+	    errorMessage = false;
+          }, 500);
+          errorMessage = true;
+	}
+      }
+
+

@@ -1,0 +1,117 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>memotune</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.20/p5.js"></script>	
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.22/addons/p5.sound.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.23/addons/p5.dom.min.js"></script>
+
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>  
+      <script>
+      var NOTE_FREQS = [16.35, 17.32, 18.35, 19.45, 20.60, 21.83, 23.12, 24.50, 25.96, 27.50, 29.14, 30.87];
+      var CANVAS_WIDTH = 1024;
+      var CANVAS_HEIGHT = 768;
+      var OUTER_RADIUS = 300;
+      var innerRadius = 285;
+      var notes = [];
+      var playing = false;
+      var level = 0;
+      var noteCount = 0;
+      var duration = 500;
+      var freq1;
+      var freq2;
+      var circlePressed;
+      var message = ["Memotune is a fun way to work out your memory while training your musical ear", "To give it a try, click 'GO' and listen to the notes.  When you hear a note that is identical to the note played two notes ago, click inside of the square.  You lose points if you fail to click when the notes are the same or you click when the notes are different", "Memotune demands concentration and strengthens your short-term (working) memory.  It is based on the scientifically acclaimed n-back test that is believed to improve fluid intelligence.  Have fun!"];
+      var goButton;
+      
+      
+      function setup() {
+        createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);  
+        osc = new p5.Oscillator();
+        osc.setType('sine');
+        goButton = createButton('GO');
+        goButton.mousePressed(go);
+
+      
+      }
+
+      function draw() {
+
+        outerCircle = ellipse(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, OUTER_RADIUS, OUTER_RADIUS);
+        innerCircle = ellipse(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, innerRadius, innerRadius);
+        circlePressed = innerCircle.mousePressed() || outerCircle.mousePressed();
+        
+      }
+      
+      function go()
+      {
+        while (innerRadius > 0)
+        {
+	  setTimeout(function()
+          { 
+	    freq = NOTE_FREQS[Math.floor(Math.random() * NOTE_FREQS.length)];
+
+	    osc.freq(freq);
+            playing = true;
+      	    osc.start();
+	    osc.amp(0.5, 0.05);		     
+            osc.stop(duration/1000);			      
+            notes.append(freq);
+            if ((notes.length > 1) && (freq == notes[notes.length - 2]) && (mouseIsPressed == false))
+            {
+              deduct();
+            }
+          }, duration);
+        }
+      }
+
+
+      function deduct(){
+        
+
+
+      }
+
+  
+      function mousePressed(){
+        var d = dist(mouseX, mouseY, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
+        if (d < OUTER_RADIUS && noteCount > 1){
+          circlePressed = true;
+          check();
+   	}
+      }
+
+      function check()
+      {
+        var freq1 = notes[notes.length];
+        var freq2 = notes[notes.length - 2];
+        if (freq1 == freq2 && circlePressed)
+        {
+          points += level;
+          duration -+ 10;
+  
+	} else if ((freq1 == freq2 && !circlePressed) || (freq1 != freq2 && (circlePressed)))
+        {
+	  innerRadius -= 15;
+
+	}
+
+
+        }
+      }
+    </script>
+
+</body>
+</html>

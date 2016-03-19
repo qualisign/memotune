@@ -1,0 +1,154 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>memotune</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.20/p5.js"></script>	
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.22/addons/p5.sound.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.23/addons/p5.dom.min.js"></script>
+
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>  
+      <script>
+      var NOTE_FREQS; 
+      var CANVAS_WIDTH;
+      var CANVAS_HEIGHT;
+      var RADIUS;
+      var playing;
+      var circleColor;
+      var BGCOLOR;
+      var textColor;
+      var d;
+      var isOverCircle;
+      var previous;
+      var current;
+      var PAUSE;
+      var errorMessage;
+      var errorText;
+      var messageX;
+      var messageY;
+      
+      function setup() {
+
+        ERROR_WORDS = ["whoa there!", "bad!", "nope!", "oof!", "nein!", "yikes!", "doh!"];
+        NOTE_FREQS = [16.35, 20.60, 23.12, 27.50, 29.14];
+        CANVAS_WIDTH = 1024;
+        CANVAS_HEIGHT = 768;
+        RADIUS = 150;
+        notes = [];
+        playing = false;
+        circleColor = 220;
+        BGCOLOR = 100;
+        PAUSE = 300;
+      
+        createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        background(BGCOLOR);
+        osc = new p5.Oscillator();
+        osc.setType('sine');
+        
+      }
+
+
+      function draw() {
+        current = notes.length - 1;
+        previous = notes.length - 3;
+        d = dist(mouseX, mouseY, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);      
+        if (d < RADIUS) {
+          isOverCircle = true;
+	  cursor(HAND);	
+        } else {
+          isOverCircle = false;
+          cursor(ARROW);		
+        }
+      
+        fill(circleColor);
+        ellipse(CANVAS_WIDTH/2, CANVAS_HEIGHT/2, RADIUS*2, RADIUS*2);
+
+	if (errorMessage == true){
+          messageX = CANVAS_WIDTH/2 + Math.random()*200;    
+          messageY = CANVAS_HEIGHT/2 - Math.random()*200;
+	  textColor = BGCOLOR - 100;
+	  errorText = str(ERROR_WORDS[Math.floor(Math.random()*(ERROR_WORDS.length-1))]);
+	  if (textColor!=BGCOLOR){
+	    fill(textColor);
+	    text(errorText, messageX, messageY);
+	    textColor++;	
+	  }
+	}
+      }
+      
+     
+      function mouseClicked() {
+
+        if (isOverCircle) {    
+	  if (!playing){
+	    playTune();
+	  } 
+          else {
+            if (current > 1){
+              check();
+            }
+        }
+      }
+
+
+
+	  	  
+      function playTune() {
+	 (function next() {
+            if (circleColor == BGCOLOR) return;	  
+            setTimeout(function() {
+              freq = NOTE_FREQS[Math.floor(Math.random()*NOTE_FREQS.length)] * 10;
+              notes.push(freq);
+              playing = true;
+              osc.freq(freq);
+              osc.amp(0.5, 0.05);
+       	      osc.start();
+	      osc.stop(1);
+	      // does user fail to click when notes are same
+      	      if (notes[current] == notes[previous] && current > 2) {
+	        setTimeout(function(){
+                  if (!mouseIsPressed){
+                  circleColor -= 10;
+                  setTimeout(function(){
+	            errorMessage = false;
+                    }, 500);
+                    errorMessage = true;
+	          }
+	        }, 1500);
+	      }
+              next();
+              }, 1500);
+           })();
+          }
+	  
+      function check() {
+	if (notes[current] == notes[previous]) {
+	  console.log(str(notes));
+	  console.log(notes[current] + " is equal to " + notes[previous]);
+          circleColor += 10;
+	}
+        else {
+          circleColor -= 10;
+	  console.log(notes[current] + " isn't equal to " + notes[previous]);
+          setTimeout(function(){
+	    errorMessage = false;
+          }, 500);
+          errorMessage = true;
+	}
+      }
+     
+    </script>
+
+</body>
+</html>
