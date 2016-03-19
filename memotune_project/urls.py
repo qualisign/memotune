@@ -16,6 +16,16 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from memotune import views
+
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-]
+    url(r'^admin/', admin.site.urls),
+    url(r'^introduction', views.home, name="home"),
+    url(r'start', views.start, name="start"),
+    url(r'profile', views.profile, name="profile"),
+    url(r'leaderboards', views.leaderboards, name="leaderboards"),
+    url(r'research', views.research, name="research"),
+#    url(r'register', views.register, name="register"),
+ #   url(r'login', views.login, name="login"),
+    url(r'^$', views.home, name='home'),
+    ]
