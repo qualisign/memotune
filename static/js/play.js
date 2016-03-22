@@ -150,6 +150,9 @@
 	 (function next() {
             if (tries < 1) return;	  
              setTimeout(function() {
+	      if (immunity == true){
+                immunity = false;
+	      }	 
 	      freq = notesSample[Math.floor(Math.random()*notesSample.length)] * 10;
 	      notes.push(freq);
               playing = true;
@@ -166,8 +169,7 @@
 			errorMessage = true;
 			console.log(notes[notes.length-1] + " is equal to " + notes[notes.length-3] + " but there was no click.");
 	          }
-	      }, 1400);
-              immunity = false;
+	      }, 1400);	      
               errorMessage = false;	 
               next();
               }, 1500);
@@ -182,8 +184,10 @@
             level += 1;
             notesSample = getRandomSubarray(NOTE_FREQS, level+4);	  	      
 	  }   
-	  points += level;
-	  immunity = true;  
+	  if (immunity == false){
+	    points += level;
+	    immunity = true;  
+	  }
 	}
         else {
           tries -= 1;
