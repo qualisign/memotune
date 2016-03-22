@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content}
+    <body>
+        <h1>login to memotune</h1>
+
+        <form id="login_form" method="post" action="/login/">
+            {% csrf_token %}
+            username: <input type="text" name="username" value="" size="50" />
+            <br />
+            password: <input type="password" name="password" value="" size="50" />
+            <br />
+
+            <input type="submit" value="submit" />
+        </form>
+
+    </body>
+{% endblock %}

@@ -1,4 +1,5 @@
       var NOTE_FREQS;
+      var NOTE_NAMES;
       var FIBONACCI;
       var CANVAS_WIDTH;
       var CANVAS_HEIGHT;
@@ -25,9 +26,10 @@
       var immunity;  // 
 
       function setup() {
-	FIBONACCI = [8, 13, 21, 34, 55, 89];
+	FIBONACCI = [5, 8, 13, 21, 34, 55, 89];
         ERROR_WORDS = ["BAD!", "NOPE!", "OOF!", "NEIN!", "YIKES!", "DOH!", "WHOOPS!"];
 	NOTE_FREQS = [16.35, 17.32, 18.35, 19.45, 20.60, 21.83, 23.12, 24.50, 25.96, 27.50, 29.14, 30.87];
+	NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];  
 	CANVAS_WIDTH = 1024;
         CANVAS_HEIGHT = 768;
         RADIUS = 150;
@@ -35,7 +37,7 @@
         playing = false;
 	immunity = false;  
         circleColor = 200;
-	transitionColor = 0;  
+	transitionColor = 255;  
 	textColor = 0;  
         BGCOLOR = 77;
         PAUSE = 300;
@@ -48,6 +50,18 @@
         background(BGCOLOR);
         osc = new p5.Oscillator();
         osc.setType('sine');
+
+	if (keyIsPressed && keyCode == SPACE){
+	  if (!playing){
+	    playTune();
+	  } 
+          else {
+            if ((notes.length-1) > 2){
+              check();
+            }
+          }
+
+        }  
         
       }
 
@@ -100,13 +114,13 @@
 		textColor++;
 	    }
 	    if (transitionColor < BGCOLOR){
-		transitionColor += 2;
+		transitionColor -= 2;
 	    }
 	}
 	  
       }
       
-      function mouseClicked() {
+      function mousePressed() {
 
         if (isOverCircle) {    
 	  if (!playing){
@@ -120,7 +134,6 @@
         } 
 
       }
-
 
       function getRandomSubarray(arr, size) {
         var shuffled = arr.slice(0), i = arr.length, temp, index;
@@ -137,16 +150,7 @@
 	 (function next() {
             if (tries < 1) return;	  
              setTimeout(function() {
-	       // weight likelihood of same note to > 33%
-	       if (Math.random() > 0.66 && notes.length>2){
-		   console.log("weighted note added.");
-		   freq = notes[notes.length-2];		   
-		 }
-	       else {
-
-		   console.log("note sample is " + notesSample);
-		   freq = notesSample[Math.floor(Math.random()*notesSample.length)] * 10;
-		 }
+	      freq = notesSample[Math.floor(Math.random()*notesSample.length)] * 10;
 	      notes.push(freq);
               playing = true;
 	      osc.freq(freq);	 
@@ -162,7 +166,7 @@
 			errorMessage = true;
 			console.log(notes[notes.length-1] + " is equal to " + notes[notes.length-3] + " but there was no click.");
 	          }
-	      }, 1500);
+	      }, 1400);
               immunity = false;
               errorMessage = false;	 
               next();

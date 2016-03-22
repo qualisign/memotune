@@ -1,3 +1,4 @@
+
 """memotune_project URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -21,11 +22,11 @@ from memotune import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^introduction', views.home, name="home"),
-    url(r'start', views.start, name="start"),
+    url(r'^start', views.start, name="start"),
     url(r'profile', views.profile, name="profile"),
     url(r'leaderboards', views.leaderboards, name="leaderboards"),
     url(r'research', views.research, name="research"),
-#    url(r'register', views.register, name="register"),
- #   url(r'login', views.login, name="login"),
+    url(r'register', views.register, name="register"),
+    url(r'login', views.login, name="login"),
     url(r'^$', views.home, name='home'),
     ]

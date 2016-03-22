@@ -27,6 +27,12 @@ h2
     font-family: 'Delius Swash Caps', cursive;
     padding-left: 20px;
 }
+h3
+{
+    color: #ffffe6;
+    font-family: 'Delius Swash Caps', cursive;
+    align-content: center;
+}
 p
 {
     color: #ff99ff;
